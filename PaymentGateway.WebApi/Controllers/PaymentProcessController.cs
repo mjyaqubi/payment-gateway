@@ -19,7 +19,7 @@ namespace PaymentGateway.WebApi.Controllers
         private readonly IPaymentProcessService paymentProcessService;
         private readonly IPaymentHistoryService paymentHistoryService;
 
-        public PaymentProcessController(IPaymentProcessService paymentProcessService, IPaymentHistoryService paymentHistoryService) 
+        public PaymentProcessController(IPaymentProcessService paymentProcessService, IPaymentHistoryService paymentHistoryService)
         {
             this.paymentProcessService = paymentProcessService;
             this.paymentHistoryService = paymentHistoryService;
