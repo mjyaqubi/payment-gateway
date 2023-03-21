@@ -18,10 +18,8 @@ namespace PaymentGateway.WebApi
             // Add services to the container.
             builder.Services.AddOptions();
             builder.Services.Configure<AcquiringBankSettings>(builder.Configuration.GetSection("AcquiringBankSettings").Bind);
-
             builder.Services.AddScoped<IPaymentProcessService, PaymentProcessService>();
             builder.Services.AddScoped<IPaymentHistoryService, PaymentHistoryService>();
-
             builder.Services.AddControllers().AddJsonOptions(opt =>
             {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

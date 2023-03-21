@@ -14,11 +14,19 @@ namespace PaymentGateway.ApplicationService.PaymentProcess.Services
 	{
         private readonly AcquiringBankSettings settings;
         private readonly PaymentGatewayDbContext dbContext;
+        private readonly HttpClient httpClient;
 
-        public PaymentProcessService(PaymentGatewayDbContext dbContext, IOptions<AcquiringBankSettings> settings)
+        public PaymentProcessService(PaymentGatewayDbContext dbContext, IOptions<AcquiringBankSettings> settings) {
+            this.settings = settings.Value;
+            this.dbContext = dbContext;
+            this.httpClient = new HttpClient();
+        }
+
+        public PaymentProcessService(PaymentGatewayDbContext dbContext, IOptions<AcquiringBankSettings> settings, HttpClient httpClient)
         {
             this.settings = settings.Value;
             this.dbContext = dbContext;
+            this.httpClient = httpClient;
         }
 
         public async Task<PaymentProcessResponse> ProcessAsync(Guid merchantId, PaymentProcessRequest request)
@@ -26,8 +34,7 @@ namespace PaymentGateway.ApplicationService.PaymentProcess.Services
             // validation: auto using attributes
             // call api
             var Id = Guid.NewGuid();
-            var client = new HttpClient() { BaseAddress = new Uri(settings.BaseUrl) };
-            var bankResponse = await client.PostAsJsonAsync($"api/12345678-1234-1234-1234-123456789012/process", new
+            var bankResponse = await httpClient.PostAsJsonAsync(settings.BaseUrl + "api/"+ settings.PaymentGatewayID +"/process", new
             {
                 PaymentGatewayOrderId = Id,
                 CardNumber = request.CardNumber,
@@ -76,4 +83,3 @@ namespace PaymentGateway.ApplicationService.PaymentProcess.Services
         }
     }
 }
-
